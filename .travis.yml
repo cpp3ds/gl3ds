@@ -1,0 +1,7 @@
+language: c
+
+before_install:
+  - sh .travis-deps.sh
+
+script:
+  - make -j4
