@@ -1,5 +1,7 @@
 language: c
 
+sudo: required
+
 before_install:
   - sh .travis-deps.sh
 
