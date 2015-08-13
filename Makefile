@@ -3,9 +3,11 @@ ifeq ($(strip $(CTRULIB)),)
 $(error "Please set CTRULIB in your environment: $ export CTRULIB=<path to ctrulib>")
 endif
 
-include $(DEVKITARM)/base_rules
+VERSION := 1.0.0
 
-PROJECT :=  libgl3ds
+BUGREPORT := https://github.com/cpp3ds/gl3ds
+
+include $(DEVKITARM)/base_rules
 
 LIBDIRS	:=  $(CTRULIB)
 
@@ -22,17 +24,22 @@ CFLAGS  :=  -g -Wall -O2 -mword-relocations \
 
 ASFLAGS	:=	-g $(ARCH)
 
-CFILES  :=  $(wildcard src/*.c)
+DEFINITIONS := -DPACKAGE_VERSION=\"$(VERSION)\" -DPACKAGE_BUGREPORT=\"$(BUGREPORT)\"
+
+CFILES  :=  $(wildcard src/**/*.c)  $(wildcard src/**.c)
 
 export LD      :=  $(CC)
 export OFILES  :=  $(CFILES:src/%.c=build/%.o)
 
 .PHONY: all clean
 
-all: dir lib/$(PROJECT).a
+all: dir lib/libgl3ds.a
 
 dir:
-	@mkdir -p build
+	@mkdir -p build/c11
+	@mkdir -p build/math
+	@mkdir -p build/util
+	@mkdir -p build/drivers
 	@mkdir -p lib
 
 clean:
@@ -40,6 +47,6 @@ clean:
 	@echo "Successfully cleaned."
 
 build/%.o: src/%.c
-	$(CC) -MMD -MP -MF build/$*.d $(CFLAGS) -c $< -o $@
+	$(CC) -MMD -MP -MF build/$*.d $(CFLAGS) $(DEFINITIONS) -c $< -o $@
 
-lib/$(PROJECT).a: $(OFILES)
+lib/libgl3ds.a: $(OFILES)
