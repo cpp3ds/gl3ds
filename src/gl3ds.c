@@ -107,12 +107,13 @@ void make_current(struct gl_context *ctx)
 		//Register the apt callback hook
 		aptHook(&apt_hook_cookie, apt_hook_func, NULL);
 		GPU_Init(NULL);
-		GPU_Reset(NULL, ctx->CommandBuffer, 0x40000);
+		GPU_Reset(NULL, ctx->CommandBuffer, ctx->CommandBufferSize);
 	} else {
 		GPUCMD_SetBuffer(ctx->CommandBuffer, ctx->CommandBufferSize, ctx->CommandBufferOffset);
 	}
 
 	_mesa_make_current(ctx, ctx->DrawBuffer, ctx->ReadBuffer);
+	_gl3ds_update_viewport(ctx);
 }
 
 
@@ -318,8 +319,10 @@ void gl3ds_flushContext(GLuint context)
 	GPUCMD_SetBufferOffset(0);
 }
 
+
 void gl3ds_swapBuffers()
 {
+	// TODO: Make vblack waiting optional
 	gfxSwapBuffersGpu();
-	gspWaitForEvent(GSPEVENT_VBlank0, true);
+	gspWaitForVBlank();
 }
