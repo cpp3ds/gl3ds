@@ -17,9 +17,8 @@ export INCLUDE :=  $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 
 ARCH    :=  -march=armv6k -mtune=mpcore -mfloat-abi=hard
 
-CFLAGS  :=  -g -Wall -O2 -mword-relocations \
-            -fno-strict-aliasing \
-            -fomit-frame-pointer -ffast-math \
+CFLAGS  :=  -g -Wall -O2 \
+            -fno-strict-aliasing -ffunction-sections -fdata-sections \
             $(ARCH) $(INCLUDE)
 
 ASFLAGS	:=	-g $(ARCH)
