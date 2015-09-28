@@ -129,6 +129,7 @@ extern "C" {
 #define GL_LINEAR                   0x2601
 #define GL_REPEAT                   0x2901
 #define GL_CLAMP_TO_EDGE            0x812F
+#define GL_CLAMP_TO_BORDER          0x812D
 #define GL_CLAMP                    0x2900
 #define GL_S                        0x2000
 #define GL_T                        0x2001
@@ -175,6 +176,13 @@ extern "C" {
 #define GL_PROXY_TEXTURE_2D_ARRAY         0x8C1B
 #define GL_TEXTURE_CUBE_MAP_ARRAY         0x9009
 
+#define GL_LIGHT_MODEL_COLOR_CONTROL      0x81F8
+#define GL_SINGLE_COLOR                   0x81F9
+#define GL_SEPARATE_SPECULAR_COLOR        0x81FA
+#define GL_FIRST_VERTEX_CONVENTION        0x8E4D
+#define GL_LAST_VERTEX_CONVENTION         0x8E4E
+#define GL_PROVOKING_VERTEX               0x8E4F
+
 // Buffer
 #define GL_BUFFER_SIZE                    0x8764
 #define GL_BUFFER_USAGE                   0x8765
@@ -218,6 +226,7 @@ extern "C" {
 #define GL_COLOR				0x1800
 #define GL_DEPTH				0x1801
 #define GL_STENCIL				0x1802
+#define GL_DITHER				0x0BD0
 
 #define GL_FRAMEBUFFER                    0x8D40
 #define GL_RENDERBUFFER                   0x8D41
@@ -370,18 +379,15 @@ extern "C" {
 #define GL_SRGB_ALPHA                     0x8C42
 #define GL_SRGB8_ALPHA8                   0x8C43
 
+#define GL_SEPARATE_SPECULAR_COLOR		0x81FA
+#define GL_TEXTURE_MIN_LOD			0x813A
+#define GL_TEXTURE_MAX_LOD			0x813B
+
 // Matrix mode
 #define GL_MATRIX_MODE          0x0BA0
 #define GL_MODELVIEW            0x0001
 #define GL_PROJECTION           0x0002
 #define GL_TEXTURE              0x0004
-
-// Culling
-#define GL_CULL_FACE            0x0B44
-#define GL_CW                   0x0900
-#define GL_CCW                  0x0901
-#define GL_FRONT                0x0404
-#define GL_BACK                 0x0405
 
 // Misc
 #define GL_ALPHA_TEST                     0x0BC0
@@ -549,11 +555,8 @@ extern "C" {
 #define GL_MAX_DEBUG_GROUP_STACK_DEPTH    0x826C
 #define GL_DEBUG_GROUP_STACK_DEPTH        0x826D
 
-#define GL_DEBUG_TYPE_MARKER              0x8268
-#define GL_DEBUG_TYPE_PUSH_GROUP          0x8269
-#define GL_DEBUG_TYPE_POP_GROUP           0x826A
-#define GL_DEBUG_SEVERITY_NOTIFICATION    0x826B
 #define GL_DEBUG_OUTPUT                   0x92E0
+#define GL_CONTEXT_FLAG_DEBUG_BIT         0x00000002
 
 /* Implementation limits */
 #define GL_MAX_LIST_NESTING			0x0B31
@@ -705,6 +708,38 @@ extern "C" {
 #define GL_IMPLEMENTATION_COLOR_READ_FORMAT_OES 0x8B9B
 #define GL_MAX_VARYING_FLOATS_ARB         0x8B4B
 
+#define GL_GENERATE_MIPMAP                0x8191
+
+#define GL_PIXEL_PACK_BUFFER              0x88EB
+#define GL_PIXEL_UNPACK_BUFFER            0x88EC
+#define GL_PIXEL_PACK_BUFFER_BINDING      0x88ED
+#define GL_PIXEL_UNPACK_BUFFER_BINDING    0x88EF
+
+#define GL_FRONT_LEFT				0x0400
+#define GL_FRONT_RIGHT				0x0401
+#define GL_BACK_LEFT				0x0402
+#define GL_BACK_RIGHT				0x0403
+#define GL_FRONT_AND_BACK			0x0408
+
+#define GL_LOWER_LEFT                     0x8CA1
+#define GL_UPPER_LEFT                     0x8CA2
+
+// GL_EXT_texture_sRGB_decode
+#define GL_TEXTURE_SRGB_DECODE_EXT        0x8A48
+#define GL_DECODE_EXT                     0x8A49
+#define GL_SKIP_DECODE_EXT                0x8A4A
+
+// Multisample
+#define GL_MULTISAMPLE               0x809D
+#define GL_SAMPLE_ALPHA_TO_COVERAGE   0x809E
+#define GL_SAMPLE_ALPHA_TO_ONE        0x809F
+#define GL_SAMPLE_COVERAGE            0x80A0
+#define GL_SAMPLE_BUFFERS             0x80A8
+#define GL_SAMPLES                    0x80A9
+#define GL_SAMPLE_COVERAGE_VALUE      0x80AA
+#define GL_SAMPLE_COVERAGE_INVERT     0x80AB
+#define GL_MULTISAMPLE_BIT            0x20000000
+
 // Hints
 #define GL_PERSPECTIVE_CORRECTION_HINT		0x0C50
 #define GL_POINT_SMOOTH_HINT			0x0C51
@@ -717,10 +752,67 @@ extern "C" {
 
 #define GL_STENCIL_TEST_TWO_SIDE_EXT      0x8910
 
-#define GL_KEEP                 GPU_KEEP
+#define GL_KEEP                 GPU_STENCIL_KEEP
 #define GL_INCR                 0x1E02
 #define GL_DECR                 0x1E03
-#define GL_AND_NOT              GPU_AND_NOT
+#define GL_AND_NOT              GPU_STENCIL_ZERO
+
+// Polygons
+#define GL_POINT				0x1B00
+#define GL_LINE					0x1B01
+#define GL_FILL					0x1B02
+#define GL_CW					0x0900
+#define GL_CCW					0x0901
+#define GL_FRONT				0x0404
+#define GL_BACK					0x0405
+#define GL_POLYGON_MODE				0x0B40
+#define GL_POLYGON_SMOOTH			0x0B41
+#define GL_POLYGON_STIPPLE			0x0B42
+#define GL_EDGE_FLAG				0x0B43
+#define GL_CULL_FACE				0x0B44
+#define GL_CULL_FACE_MODE			0x0B45
+#define GL_FRONT_FACE				0x0B46
+#define GL_POLYGON_OFFSET_FACTOR		0x8038
+#define GL_POLYGON_OFFSET_UNITS			0x2A00
+#define GL_POLYGON_OFFSET_POINT			0x2A01
+#define GL_POLYGON_OFFSET_LINE			0x2A02
+#define GL_POLYGON_OFFSET_FILL			0x8037
+
+// Lighting
+#define GL_LIGHTING				0x0B50
+#define GL_LIGHT0				0x4000
+#define GL_LIGHT1				0x4001
+#define GL_LIGHT2				0x4002
+#define GL_LIGHT3				0x4003
+#define GL_LIGHT4				0x4004
+#define GL_LIGHT5				0x4005
+#define GL_LIGHT6				0x4006
+#define GL_LIGHT7				0x4007
+#define GL_SPOT_EXPONENT			0x1205
+#define GL_SPOT_CUTOFF				0x1206
+#define GL_CONSTANT_ATTENUATION			0x1207
+#define GL_LINEAR_ATTENUATION			0x1208
+#define GL_QUADRATIC_ATTENUATION		0x1209
+#define GL_AMBIENT				0x1200
+#define GL_DIFFUSE				0x1201
+#define GL_SPECULAR				0x1202
+#define GL_SHININESS				0x1601
+#define GL_EMISSION				0x1600
+#define GL_POSITION				0x1203
+#define GL_SPOT_DIRECTION			0x1204
+#define GL_AMBIENT_AND_DIFFUSE			0x1602
+#define GL_COLOR_INDEXES			0x1603
+#define GL_LIGHT_MODEL_TWO_SIDE			0x0B52
+#define GL_LIGHT_MODEL_LOCAL_VIEWER		0x0B51
+#define GL_LIGHT_MODEL_AMBIENT			0x0B53
+//#define GL_FRONT_AND_BACK			0x0408
+#define GL_SHADE_MODEL				0x0B54
+#define GL_FLAT					0x1D00
+#define GL_SMOOTH				0x1D01
+#define GL_COLOR_MATERIAL			0x0B57
+#define GL_COLOR_MATERIAL_FACE			0x0B55
+#define GL_COLOR_MATERIAL_PARAMETER		0x0B56
+#define GL_NORMALIZE				0x0BA1
 
 
 /*
@@ -735,7 +827,13 @@ extern "C" {
 #define GL_LINES                0x0800
 #define GL_LINE_STRIP           0x1600
 
+#define GL_POLYGON				0x0009
+
 // Logic Ops
+#define GL_LOGIC_OP                 0x0BF1
+#define GL_INDEX_LOGIC_OP           0x0BF1
+#define GL_COLOR_LOGIC_OP           0x0BF2
+#define GL_LOGIC_OP_MODE            0x0BF0
 #define GL_CLEAR             GPU_LOGICOP_CLEAR
 #define GL_SET               GPU_LOGICOP_SET
 #define GL_COPY              GPU_LOGICOP_COPY
@@ -1078,6 +1176,23 @@ void glLoadTransposeMatrixd( const GLdouble *m );
 void glMultTransposeMatrixf( const GLfloat *m );
 void glMultTransposeMatrixd( const GLdouble *m );
 
+// light.c
+void glShadeModel( GLenum mode );
+void glProvokingVertex(GLenum mode);
+void glColorMaterial( GLenum face, GLenum mode );
+void glLightf( GLenum light, GLenum pname, GLfloat param );
+void glLightfv( GLenum light, GLenum pname, const GLfloat *params );
+void glLightiv( GLenum light, GLenum pname, const GLint *params );
+void glLighti( GLenum light, GLenum pname, GLint param );
+void glLightModelf( GLenum pname, GLfloat param );
+void glLightModelfv( GLenum pname, const GLfloat *params );
+void glLightModeli( GLenum pname, GLint param );
+void glLightModeliv( GLenum pname, const GLint *params );
+void glGetLightfv( GLenum light, GLenum pname, GLfloat *params );
+void glGetLightiv( GLenum light, GLenum pname, GLint *params );
+void glGetMaterialfv( GLenum face, GLenum pname, GLfloat *params );
+void glGetMaterialiv( GLenum face, GLenum pname, GLint *params );
+
 // multisample.c
 void glSampleCoverage(GLclampf value, GLboolean invert);
 void glGetMultisamplefv(GLenum pname, GLuint index, GLfloat* val);
@@ -1177,7 +1292,15 @@ void glTexEnvfv( GLenum target, GLenum pname, const GLfloat *param );
 void glTexEnvi( GLenum target, GLenum pname, GLint param );
 void glTexEnviv( GLenum target, GLenum pname, const GLint *param );
 
-// teximage.h
+// texgetimage.c
+void glGetTexImage( GLenum target, GLint level, GLenum format, GLenum type, GLvoid *pixels );
+void glGetnTexImageARB( GLenum target, GLint level, GLenum format, GLenum type, GLsizei bufSize, GLvoid *pixels );
+void glGetTextureImage(GLuint texture, GLint level, GLenum format, GLenum type, GLsizei bufSize, GLvoid *pixels);
+void glGetCompressedTexImage(GLenum target, GLint lod, GLvoid *img);
+void glGetnCompressedTexImageARB(GLenum target, GLint level, GLsizei bufSize, GLvoid *img);
+void glGetCompressedTextureImage(GLuint texture, GLint level, GLsizei bufSize, GLvoid *pixels);
+
+// teximage.c
 void glTexImage1D( GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
 void glTexImage2D( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
 void glTexImage3D( GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels );
@@ -1268,9 +1391,9 @@ void glUniform2f(GLint location, GLfloat v0, GLfloat v1);
 void glUniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2);
 void glUniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3);
 void glUniform1i(GLint location, GLint v0);
-//void glUniform2i(GLint location, GLint v0, GLint v1);
-//void glUniform3i(GLint location, GLint v0, GLint v1, GLint v2);
-//void glUniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
+void glUniform2i(GLint location, GLint v0, GLint v1);
+void glUniform3i(GLint location, GLint v0, GLint v1, GLint v2);
+void glUniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3);
 //void glUniform1ui(GLint location, GLuint v0);
 //void glUniform2ui(GLint location, GLuint v0, GLuint v1);
 //void glUniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2);
@@ -1282,7 +1405,7 @@ void glUniform4fv(GLint location, GLsizei count, const GLfloat *value);
 //void glUniform1iv(GLint location, GLsizei count, const GLint *value);
 //void glUniform2iv(GLint location, GLsizei count, const GLint *value);
 //void glUniform3iv(GLint location, GLsizei count, const GLint *value);
-//void glUniform4iv(GLint location, GLsizei count, const GLint *value);
+void glUniform4iv(GLint location, GLsizei count, const GLint *value);
 //void glUniform1uiv(GLint location, GLsizei count, const GLuint *value);
 //void glUniform2uiv(GLint location, GLsizei count, const GLuint *value);
 //void glUniform3uiv(GLint location, GLsizei count, const GLuint *value);
