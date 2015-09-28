@@ -38,7 +38,7 @@
 //#include "../shaderobj.h"
 #include "../texcompress.h"
 #include "../texformat.h"
-//#include "../texgetimage.h"
+#include "../texgetimage.h"
 #include "../teximage.h"
 #include "../texobj.h"
 #include "../texstorage.h"
@@ -53,9 +53,10 @@
 //#include "program/program.h"
 //#include "tnl/tnl.h"
 #include "swrast.h"
-//#include "swrast/s_renderbuffer.h"
+//#include "s_renderbuffer.h"
 
 #include "driverfuncs.h"
+#include "meta.h"
 
 
 /**
@@ -84,7 +85,7 @@ _mesa_init_driver_functions(struct dd_function_table *driver)
 //   driver->Accum = _mesa_accum;
 //   driver->RasterPos = _tnl_RasterPos;
 //   driver->DrawPixels = _swrast_DrawPixels;
-   driver->ReadPixels = _mesa_readpixels;
+//   driver->ReadPixels = _mesa_readpixels;
 //   driver->CopyPixels = _swrast_CopyPixels;
 //   driver->Bitmap = _swrast_Bitmap;
 
@@ -93,14 +94,14 @@ _mesa_init_driver_functions(struct dd_function_table *driver)
 //   driver->QuerySamplesForFormat = _mesa_query_samples_for_format;
    driver->TexImage = _mesa_store_teximage;
    driver->TexSubImage = _mesa_store_texsubimage;
-//   driver->GetTexImage = _mesa_meta_GetTexImage;
-//   driver->ClearTexSubImage = _mesa_meta_ClearTexSubImage;
-//   driver->CopyTexSubImage = _mesa_meta_CopyTexSubImage;
-//   driver->GenerateMipmap = _mesa_meta_GenerateMipmap;
+   driver->GetTexImage = _mesa_meta_GetTexImage;
+   driver->ClearTexSubImage = _mesa_meta_ClearTexSubImage;
+   driver->CopyTexSubImage = _mesa_meta_CopyTexSubImage;
+   driver->GenerateMipmap = _mesa_meta_GenerateMipmap;
    driver->TestProxyTexImage = _mesa_test_proxy_teximage;
    driver->CompressedTexImage = _mesa_store_compressed_teximage;
    driver->CompressedTexSubImage = _mesa_store_compressed_texsubimage;
-//   driver->GetCompressedTexImage = _mesa_GetCompressedTexImage_sw;
+   driver->GetCompressedTexImage = _mesa_GetCompressedTexImage_sw;
    driver->BindTexture = NULL;
    driver->NewTextureObject = _mesa_new_texture_object;
    driver->DeleteTexture = _mesa_delete_texture_object;
@@ -110,7 +111,7 @@ _mesa_init_driver_functions(struct dd_function_table *driver)
    driver->FreeTextureImageBuffer = _swrast_free_texture_image_buffer;
    driver->MapTextureImage = _swrast_map_teximage;
    driver->UnmapTextureImage = _swrast_unmap_teximage;
-//   driver->DrawTex = _mesa_meta_DrawTex;
+   driver->DrawTex = _mesa_meta_DrawTex;
 
    /* Vertex/fragment programs */
    driver->BindProgram = NULL;

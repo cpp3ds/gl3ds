@@ -33,7 +33,7 @@
 #define SWRAST_H
 
 #include "../mtypes.h"
-//#include "s_chan.h"
+#include "s_chan.h"
 
 
 /**
@@ -99,7 +99,7 @@
  */
 typedef struct {
    GLfloat attrib[VARYING_SLOT_MAX][4];
-//   GLchan color[4];   /** integer color */
+   GLchan color[4];   /** integer color */
    GLfloat pointSize;
 } SWvertex;
 
