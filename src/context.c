@@ -985,8 +985,8 @@ _mesa_initialize_context(struct gl_context *ctx,
 //   assert(driverFunctions->FreeTextureImageBuffer);
 
 //   ctx->API = api;
-   ctx->DrawBuffer = NULL;
-   ctx->ReadBuffer = NULL;
+   ctx->DrawBuffer = _mesa_create_framebuffer(visual);
+   ctx->ReadBuffer = _mesa_create_framebuffer(visual);
    ctx->WinSysDrawBuffer = NULL;
    ctx->WinSysReadBuffer = NULL;
 
