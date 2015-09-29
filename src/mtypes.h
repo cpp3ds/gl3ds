@@ -1638,6 +1638,7 @@ struct gl_vertex_array_object
 
 	uint64_t AttributeFormats;
 	uint64_t AttributePermutation;
+	uint16_t BufferStrides[3];
 	uint32_t BufferOffsets[3];
 	uint64_t BufferPermutations[3];
 };
@@ -2606,6 +2607,14 @@ struct gl_program_resource
    uint8_t StageReferences; /** Bitmask of shader stage references. */
 };
 
+struct gl_shader_uniform
+{
+	u32 location;
+	float* value;
+	u8 count;
+	bool changed;
+};
+
 /**
  * A GLSL program object.
  * Basically a linked collection of vertex and fragment shaders.
@@ -2617,6 +2626,9 @@ struct gl_shader_program
 	GLint ProjectionUniform;
 	GLint ModelviewUniform;
 	GLint TextureUniform;
+
+	struct gl_shader_uniform UniformVals[8];
+	uint8_t UniformCount;
 
    GLenum Type;  /**< Always GL_SHADER_PROGRAM (internal token) */
    GLuint Name;  /**< aka handle or ID */

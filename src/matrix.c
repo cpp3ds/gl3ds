@@ -708,11 +708,12 @@ void _mesa_init_transform( struct gl_context *ctx )
 static void rotate_projection(GLmatrix *mat)
 {
 	// Rotate 90 degree clockwise (3DS screens are sideways)
+	// Convert Z from [-1,1] to [0,1]
 	GLfloat fix[16] = {
-			0, -1,  0,  0,
-			1,  0,  0,  0,
-			0,  0,  1,  0,
-			0,  0,  0,  1
+			0, -1,  0,   0,
+			1,  0,  0,   0,
+			0,  0,  0.5, 0,
+			0,  0, -0.5, 1
 	};
 	_math_matrix_mul_floats(mat, fix);
 }
@@ -729,34 +730,5 @@ void _gl3ds_upload_matrix(GLmatrix *mat, GLint uniform, bool rotate)
 		mat->flags &= ~MAT_NEED_TRANSPOSE;
 	}
 
-	// TODO: Flip xyzw positions? Why not in shader?
-	GLfloat swapped[16];
-	swapped[0x0] = mat->m[3];
-	swapped[0x1] = mat->m[2];
-	swapped[0x2] = mat->m[1];
-	swapped[0x3] = mat->m[0];
-
-	swapped[0x4] = mat->m[7];
-	swapped[0x5] = mat->m[6];
-	swapped[0x6] = mat->m[5];
-	swapped[0x7] = mat->m[4];
-
-	swapped[0x8] = mat->m[11];
-	swapped[0x9] = mat->m[10];
-	swapped[0xa] = mat->m[9];
-	swapped[0xb] = mat->m[8];
-
-	swapped[0xc] = mat->m[15];
-	swapped[0xd] = mat->m[14];
-	swapped[0xe] = mat->m[13];
-	swapped[0xf] = mat->m[12];
-
-//	printf("\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
-//			mat->m[0], mat->m[1], mat->m[2], mat->m[3],
-//		   mat->m[4], mat->m[5], mat->m[6], mat->m[7],
-//		   mat->m[8], mat->m[9], mat->m[10], mat->m[11],
-//		   mat->m[12], mat->m[13], mat->m[14], mat->m[15]);
-
-//	glUniformMatrix4fv(uniform, 1, GL_FALSE, swapped);
 	glUniformMatrix4fv(uniform, 1, GL_TRUE, mat->m);
 }

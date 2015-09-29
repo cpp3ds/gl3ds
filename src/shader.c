@@ -51,8 +51,6 @@ void glUseProgram(GLuint program) {
 	ctx->Shared->Shader->Program = prog;
 
 	FLUSH_VERTICES(ctx, _NEW_PROGRAM);
-
-	_gl3ds_update_program(ctx);
 }
 
 
@@ -86,6 +84,11 @@ void _mesa_free_program_data(struct gl_context *ctx)
 	if (ctx->Shared->Shader->Program)
 		shaderProgramFree(ctx->Shared->Shader->Program);
 
+	int i;
+	for (i = 0; i < ctx->Shared->Shader->UniformCount; i++) {
+		free(ctx->Shared->Shader->UniformVals[i].value);
+	}
+
 	free(ctx->Shared->Shader);
 }
 
@@ -107,12 +110,15 @@ void _gl3ds_update_program(struct gl_context *ctx)
 		ctx->Shared->Shader->ModelviewUniform = GET_VSH_UNIFORM("modelview");
 		ctx->Shared->Shader->TextureUniform = GET_VSH_UNIFORM("texture");
 
+		int i;
+		for (i = 0; i < ctx->Shared->Shader->UniformCount; i++) {
+			struct gl_shader_uniform* uniform = &ctx->Shared->Shader->UniformVals[i];
+			if (uniform->changed) {
+				GPU_SetFloatUniform(GPU_VERTEX_SHADER, uniform->location, (u32*) uniform->value, uniform->count);
+				uniform->changed = false;
+			}
+		}
 		if (!ctx->Shared->Shader->Uploaded) {
-			printf("shader_uploaded");
-//			GPUCMD_Finalize();
-//			GPUCMD_FlushAndRun(NULL);
-//			gspWaitForP3D();
-//			GPUCMD_SetBufferOffset(0);
 			ctx->Shared->Shader->Uploaded = GL_TRUE;
 		}
 	}
