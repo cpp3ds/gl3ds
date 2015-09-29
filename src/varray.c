@@ -434,10 +434,10 @@ update_array(struct gl_context *ctx,
 		*
 		* The check for VBOs is handled below.
 		*/
-	if (ctx->Array.VAO == ctx->Array.DefaultVAO) {
-		_mesa_error(ctx, GL_INVALID_OPERATION, "%s(no array object bound)", func);
-		return;
-	}
+//	if (ctx->Array.VAO == ctx->Array.DefaultVAO) {
+//		_mesa_error(ctx, GL_INVALID_OPERATION, "%s(no array object bound)", func);
+//		return;
+//	}
 
 	if (stride < 0) {
 		_mesa_error( ctx, GL_INVALID_VALUE, "%s(stride=%d)", func, stride );
@@ -2314,7 +2314,7 @@ static int update_attrib_format(struct gl_vertex_array_object* vao)
 			vao->AttributeFormats |= GPU_ATTRIBFMT(index, attrib->Size, attrib->Type);
 //			vao->AttributeFormats |= ((attrib->Size-1 << 2) | attrib->Type) << (index * 4);
 			vao->AttributePermutation |= index << (index * 4);
-
+			vao->BufferStrides[index] = attrib->Stride;
 			vao->BufferOffsets[index] = (u32)attrib->Ptr - __linear_heap;
 			vao->BufferPermutations[index] = index;// << (index * 4);
 			index++;
@@ -2329,12 +2329,14 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 	// TODO: properly set up VAOs before drawing
 	GET_CURRENT_CONTEXT(ctx);
 	update_context(ctx);
-	GPU_DrawArray((GPU_Primitive_t)mode, count);
-	GPUCMD_Finalize();
-//	GPUCMD_Run(NULL);
-	GPUCMD_FlushAndRun(NULL);
-	gspWaitForP3D();
-	GPUCMD_SetBufferOffset(0);
+	GPU_DrawArray((GPU_Primitive_t)mode, 0, count);
+//	GPU_FinishDrawing();
+//	GPUCMD_Finalize();
+////	GPUCMD_Run(NULL);
+//	GPUCMD_FlushAndRun(NULL);
+//	gspWaitForP3D();
+//	ctx->CommandBufferOffset = 0;
+//	GPUCMD_SetBufferOffset(0);
 	return;
 
 	int i = 0;
@@ -2366,14 +2368,16 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 		sizeTable[i]=GPU_FORMATSIZE[v&3]*((v>>2)+1);
 		vao->AttributeFormats>>=4;
 	}
-
+	vao->AttributePermutation = 0x210;
+//printf("permutation:%x", vao->AttributePermutation);
 	for(i=0;i<numBuffers;i++)
 	{
-		u16 stride=20;
+		u16 stride= vao->BufferStrides[i];
+//		u16 stride=0;
 		param[3*(i+1)+0]=vao->BufferOffsets[i];
 		param[3*(i+1)+1]=vao->BufferPermutations[i]&0xFFFFFFFF;
 //		for(j=0;j<bufferNumAttributes[i];j++)stride+=sizeTable[(vao->BufferPermutations[i]>>(4*j))&0xF];
-		printf("stride%d:%d", i, stride);
+//		printf("stride%d:%d\n", i, stride);
 		param[3*(i+1)+2]=(bufferNumAttributes[i]<<28)|((stride&0xFFF)<<16)|((vao->BufferPermutations[i]>>32)&0xFFFF);
 	}
 
@@ -2384,8 +2388,10 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 
 	GPUCMD_AddIncrementalWrites(GPUREG_VSH_ATTRIBUTES_PERMUTATION_LOW, ((u32[]){vao->AttributePermutation&0xFFFFFFFF, (vao->AttributePermutation>>32)&0xFFFF}), 2);
 
-    GPU_DrawArray((GPU_Primitive_t)mode, count);
-//	GPUCMD_Finalize();
+    GPU_DrawArray((GPU_Primitive_t)mode, 0, count);
+	GPU_FinishDrawing();
+	GPUCMD_Finalize();
 //	GPUCMD_Run(NULL);
-//	GPUCMD_SetBufferOffset(0);
+	GPUCMD_FlushAndRun(NULL);
+	GPUCMD_SetBufferOffset(0);
 }
