@@ -2392,6 +2392,6 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 	GPU_FinishDrawing();
 	GPUCMD_Finalize();
 //	GPUCMD_Run(NULL);
-	GPUCMD_FlushAndRun(NULL);
+	GPUCMD_FlushAndRun();
 	GPUCMD_SetBufferOffset(0);
 }

@@ -8,5 +8,5 @@ git clone https://github.com/smealum/ctrulib.git
 sudo perl devkitARMupdate.pl
 
 # Get latest ctrulib and overwrite bundled one
-cd ctrulib/libctru && make ; cd -
+cd ctrulib/libctru && git checkout great-refactor && make -j4 && cd -
 sudo cp -rf ctrulib/libctru/ ${DEVKITPRO}

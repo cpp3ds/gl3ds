@@ -48,7 +48,7 @@
 #include "../fbobject.h"
 //#include "../feedback.h"
 #include "../formats.h"
-#include "../format_unpack.h"
+//#include "../format_unpack.h"
 #include "../glformats.h"
 #include "../image.h"
 #include "../macros.h"
@@ -3363,10 +3363,10 @@ cleartexsubimage_color(struct gl_context *ctx,
    switch (datatype) {
    case GL_UNSIGNED_INT:
    case GL_INT:
-      if (clearValue)
-         _mesa_unpack_uint_rgba_row(format, 1, clearValue,
-                                    (GLuint (*)[4]) colorValue.ui);
-      else
+//      if (clearValue)
+//         _mesa_unpack_uint_rgba_row(format, 1, clearValue,
+//                                    (GLuint (*)[4]) colorValue.ui);
+//      else
          memset(&colorValue, 0, sizeof colorValue);
       if (datatype == GL_INT)
          glClearBufferiv(GL_COLOR, 0, colorValue.i);
@@ -3374,10 +3374,10 @@ cleartexsubimage_color(struct gl_context *ctx,
          glClearBufferuiv(GL_COLOR, 0, colorValue.ui);
       break;
    default:
-      if (clearValue)
-         _mesa_unpack_rgba_row(format, 1, clearValue,
-                               (GLfloat (*)[4]) colorValue.f);
-      else
+//      if (clearValue)
+//         _mesa_unpack_rgba_row(format, 1, clearValue,
+//                               (GLfloat (*)[4]) colorValue.f);
+//      else
          memset(&colorValue, 0, sizeof colorValue);
       glClearBufferfv(GL_COLOR, 0, colorValue.f);
       break;
@@ -3413,10 +3413,10 @@ cleartexsubimage_depth_stencil(struct gl_context *ctx,
       /* Convert the clearValue from whatever format it's in to a floating
        * point value for the depth and an integer value for the stencil index
        */
-      _mesa_unpack_float_32_uint_24_8_depth_stencil_row(texImage->TexFormat,
-                                                        1, /* n */
-                                                        clearValue,
-                                                        depthStencilValue);
+//      _mesa_unpack_float_32_uint_24_8_depth_stencil_row(texImage->TexFormat,
+//                                                        1, /* n */
+//                                                        clearValue,
+//                                                        depthStencilValue);
       /* We need a memcpy here instead of a cast because we need to
        * reinterpret the bytes as a float rather than converting it
        */

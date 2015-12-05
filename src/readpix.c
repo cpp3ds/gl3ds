@@ -32,7 +32,7 @@
 #include "readpix.h"
 #include "framebuffer.h"
 #include "formats.h"
-#include "format_unpack.h"
+//#include "format_unpack.h"
 #include "image.h"
 #include "mtypes.h"
 #include "pack.h"
@@ -40,7 +40,7 @@
 #include "state.h"
 #include "glformats.h"
 #include "fbobject.h"
-#include "format_utils.h"
+//#include "format_utils.h"
 #include "pixeltransfer.h"
 
 
@@ -283,7 +283,7 @@ read_uint_depth_pixels( struct gl_context *ctx,
 					   GL_DEPTH_COMPONENT, type, 0, 0);
 
    for (j = 0; j < height; j++) {
-      _mesa_unpack_uint_z_row(rb->Format, width, map, (GLuint *)dst);
+//      _mesa_unpack_uint_z_row(rb->Format, width, map, (GLuint *)dst);
 
       map += stride;
       dst += dstStride;
@@ -340,7 +340,7 @@ read_depth_pixels( struct gl_context *ctx,
    if (depthValues) {
       /* General case (slower) */
       for (j = 0; j < height; j++, y++) {
-         _mesa_unpack_float_z_row(rb->Format, width, map, depthValues);
+//         _mesa_unpack_float_z_row(rb->Format, width, map, depthValues);
          _mesa_pack_depth_span(ctx, width, dst, type, depthValues, packing);
 
          dst += dstStride;
@@ -390,7 +390,7 @@ read_stencil_pixels( struct gl_context *ctx,
       for (j = 0; j < height; j++) {
          GLvoid *dest;
 
-         _mesa_unpack_ubyte_stencil_row(rb->Format, width, map, stencil);
+//         _mesa_unpack_ubyte_stencil_row(rb->Format, width, map, stencil);
          dest = _mesa_image_address2d(packing, pixels, width, height,
                                       GL_STENCIL_INDEX, type, j, 0);
 
@@ -472,10 +472,10 @@ read_rgba_pixels( struct gl_context *ctx,
       rebase_swizzle[1] = MESA_FORMAT_SWIZZLE_ZERO;
       rebase_swizzle[2] = MESA_FORMAT_SWIZZLE_ZERO;
       rebase_swizzle[3] = MESA_FORMAT_SWIZZLE_W;
-   } else if (_mesa_get_format_base_format(rb_format) != rb->_BaseFormat) {
-      needs_rebase =
-         _mesa_compute_rgba2base2rgba_component_mapping(rb->_BaseFormat,
-                                                        rebase_swizzle);
+//   } else if (_mesa_get_format_base_format(rb_format) != rb->_BaseFormat) {
+//      needs_rebase =
+//         _mesa_compute_rgba2base2rgba_component_mapping(rb->_BaseFormat,
+//                                                        rebase_swizzle);
    } else {
       needs_rebase = false;
    }
@@ -499,19 +499,19 @@ read_rgba_pixels( struct gl_context *ctx,
       bool need_convert;
 
       /* Convert to RGBA float or int/uint depending on the type of the src */
-      if (dst_is_integer) {
-         src_is_uint = _mesa_is_format_unsigned(rb_format);
-         if (src_is_uint) {
-            rgba_format = RGBA32_UINT;
-            rgba_stride = width * 4 * sizeof(GLuint);
-         } else {
-            rgba_format = RGBA32_INT;
-            rgba_stride = width * 4 * sizeof(GLint);
-         }
-      } else {
-         rgba_format = RGBA32_FLOAT;
-         rgba_stride = width * 4 * sizeof(GLfloat);
-      }
+//      if (dst_is_integer) {
+//         src_is_uint = _mesa_is_format_unsigned(rb_format);
+//         if (src_is_uint) {
+//            rgba_format = RGBA32_UINT;
+//            rgba_stride = width * 4 * sizeof(GLuint);
+//         } else {
+//            rgba_format = RGBA32_INT;
+//            rgba_stride = width * 4 * sizeof(GLint);
+//         }
+//      } else {
+//         rgba_format = RGBA32_FLOAT;
+//         rgba_stride = width * 4 * sizeof(GLfloat);
+//      }
 
       /* If we are lucky and the dst format matches the RGBA format we need to
        * convert to, then we can convert directly into the dst buffer and avoid
@@ -530,10 +530,10 @@ read_rgba_pixels( struct gl_context *ctx,
       }
 
       /* Convert to RGBA now */
-      _mesa_format_convert(rgba, rgba_format, rgba_stride,
-                           map, rb_format, rb_stride,
-                           width, height,
-                           needs_rebase ? rebase_swizzle : NULL);
+//      _mesa_format_convert(rgba, rgba_format, rgba_stride,
+//                           map, rb_format, rb_stride,
+//                           width, height,
+//                           needs_rebase ? rebase_swizzle : NULL);
 
       /* Handle transfer ops if necessary */
       if (transferOps)
@@ -565,10 +565,10 @@ read_rgba_pixels( struct gl_context *ctx,
     * L=R+G+B values.
     */
    if (!dst_is_luminance) {
-      _mesa_format_convert(dst, dst_format, dst_stride,
-                           src, src_format, src_stride,
-                           width, height,
-                           needs_rebase ? rebase_swizzle : NULL);
+//      _mesa_format_convert(dst, dst_format, dst_stride,
+//                           src, src_format, src_stride,
+//                           width, height,
+//                           needs_rebase ? rebase_swizzle : NULL);
    } else if (!dst_is_integer) {
       /* Compute float Luminance values from RGBA float */
       int luminance_stride, luminance_bytes;
@@ -592,9 +592,9 @@ read_rgba_pixels( struct gl_context *ctx,
        * from float to the type of dst if necessary)
        */
       luminance_format = _mesa_format_from_format_and_type(format, GL_FLOAT);
-      _mesa_format_convert(dst, dst_format, dst_stride,
-                           luminance, luminance_format, luminance_stride,
-                           width, height, NULL);
+//      _mesa_format_convert(dst, dst_format, dst_stride,
+//                           luminance, luminance_format, luminance_stride,
+//                           width, height, NULL);
       free(luminance);
    } else {
       _mesa_pack_luminance_from_rgba_integer(width * height, src, !src_is_uint,
@@ -653,8 +653,8 @@ fast_read_depth_stencil_pixels(struct gl_context *ctx,
    }
 
    for (i = 0; i < height; i++) {
-      _mesa_unpack_uint_24_8_depth_stencil_row(rb->Format, width,
-					       map, (GLuint *)dst);
+//      _mesa_unpack_uint_24_8_depth_stencil_row(rb->Format, width,
+//					       map, (GLuint *)dst);
       map += stride;
       dst += dstStride;
    }
@@ -704,9 +704,9 @@ fast_read_depth_stencil_pixels_separate(struct gl_context *ctx,
 
    if (stencilVals) {
       for (j = 0; j < height; j++) {
-         _mesa_unpack_uint_z_row(depthRb->Format, width, depthMap, dst);
-         _mesa_unpack_ubyte_stencil_row(stencilRb->Format, width,
-                                        stencilMap, stencilVals);
+//         _mesa_unpack_uint_z_row(depthRb->Format, width, depthMap, dst);
+//         _mesa_unpack_ubyte_stencil_row(stencilRb->Format, width,
+//                                        stencilMap, stencilVals);
 
          for (i = 0; i < width; i++) {
             dst[i] = (dst[i] & 0xffffff00) | stencilVals[i];
@@ -776,9 +776,9 @@ slow_read_depth_stencil_pixels_separate(struct gl_context *ctx,
 
    if (stencilVals && depthVals) {
       for (j = 0; j < height; j++) {
-         _mesa_unpack_float_z_row(depthRb->Format, width, depthMap, depthVals);
-         _mesa_unpack_ubyte_stencil_row(stencilRb->Format, width,
-                                        stencilMap, stencilVals);
+//         _mesa_unpack_float_z_row(depthRb->Format, width, depthMap, depthVals);
+//         _mesa_unpack_ubyte_stencil_row(stencilRb->Format, width,
+//                                        stencilMap, stencilVals);
 
          _mesa_pack_depth_stencil_span(ctx, width, type, (GLuint *)dst,
                                        depthVals, stencilVals, packing);
@@ -977,6 +977,11 @@ void glReadnPixelsARB( GLint x, GLint y, GLsizei width, GLsizei height,
 
    if (ctx->NewState)
       _mesa_update_state(ctx);
+
+	// TODO: Support more than GL_BGR direct from framebuffer
+	u8* buf = gfxGetFramebuffer(ctx->Screen, GFX_LEFT, NULL, NULL);
+	memcpy(pixels, buf + (x*240 + y)*3, 3 * width * height);
+	return;
 
    if (ctx->ReadBuffer->_Status != GL_FRAMEBUFFER_COMPLETE) {
       _mesa_error(ctx, GL_INVALID_FRAMEBUFFER_OPERATION,

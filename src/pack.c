@@ -53,7 +53,7 @@
 #include "pixeltransfer.h"
 #include "imports.h"
 #include "glformats.h"
-#include "format_utils.h"
+//#include "format_utils.h"
 #include "format_pack.h"
 
 
@@ -1414,27 +1414,27 @@ convert_integer_luminance64(int64_t src64, int bits,
       src32 = clamp_uint64_to_uint32(src64);
 
    /* If the dst type is < 32-bit, we need an extra clamp */
-   if (bits == 32) {
+//   if (bits == 32) {
       return src32;
-   } else {
-      if (dst_is_signed)
-         return _mesa_signed_to_signed(src32, bits);
-      else
-         return _mesa_unsigned_to_unsigned(src32, bits);
-   }
+//   } else {
+//      if (dst_is_signed)
+//         return _mesa_signed_to_signed(src32, bits);
+//      else
+//         return _mesa_unsigned_to_unsigned(src32, bits);
+//   }
 }
 
 static int32_t
 convert_integer(int32_t src, int bits, bool dst_is_signed, bool src_is_signed)
 {
-   if (src_is_signed && dst_is_signed)
-      return _mesa_signed_to_signed(src, bits);
-   else if (src_is_signed && !dst_is_signed)
-      return _mesa_signed_to_unsigned(src, bits);
-   else if (!src_is_signed && dst_is_signed)
-      return _mesa_unsigned_to_signed(src, bits);
-   else
-      return _mesa_unsigned_to_unsigned(src, bits);
+//   if (src_is_signed && dst_is_signed)
+//      return _mesa_signed_to_signed(src, bits);
+//   else if (src_is_signed && !dst_is_signed)
+//      return _mesa_signed_to_unsigned(src, bits);
+//   else if (!src_is_signed && dst_is_signed)
+//      return _mesa_unsigned_to_signed(src, bits);
+//   else
+//      return _mesa_unsigned_to_unsigned(src, bits);
 }
 
 void

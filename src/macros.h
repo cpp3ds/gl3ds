@@ -700,6 +700,9 @@ is_power_of_two(unsigned value)
  *
  * \sa ROUND_DOWN_TO()
  */
+#ifdef ALIGN
+#undef ALIGN
+#endif
 #define ALIGN(value, alignment)  (((value) + (alignment) - 1) & ~((alignment) - 1))
 
 /**

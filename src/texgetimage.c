@@ -35,7 +35,7 @@
 #include "enums.h"
 #include "context.h"
 #include "formats.h"
-#include "format_unpack.h"
+//#include "format_unpack.h"
 #include "glformats.h"
 #include "image.h"
 #include "mtypes.h"
@@ -47,7 +47,7 @@
 #include "teximage.h"
 #include "texobj.h"
 #include "texstore.h"
-#include "format_utils.h"
+//#include "format_utils.h"
 #include "pixeltransfer.h"
 
 /**
@@ -110,7 +110,7 @@ get_tex_depth(struct gl_context *ctx, GLuint dimensions,
                                              width, height, format, type,
                                              img, row, 0);
             const GLubyte *src = srcMap + row * srcRowStride;
-            _mesa_unpack_float_z_row(texImage->TexFormat, width, src, depthRow);
+//            _mesa_unpack_float_z_row(texImage->TexFormat, width, src, depthRow);
             _mesa_pack_depth_span(ctx, width, dest, type, depthRow, &ctx->Pack);
          }
 
@@ -158,10 +158,10 @@ get_tex_depth_stencil(struct gl_context *ctx, GLuint dimensions,
             void *dest = _mesa_image_address(dimensions, &ctx->Pack, pixels,
                                              width, height, format, type,
                                              img, row, 0);
-            _mesa_unpack_depth_stencil_row(texImage->TexFormat,
-                                           width,
-                                           (const GLuint *) src,
-                                           type, dest);
+//            _mesa_unpack_depth_stencil_row(texImage->TexFormat,
+//                                           width,
+//                                           (const GLuint *) src,
+//                                           type, dest);
             if (ctx->Pack.SwapBytes) {
                _mesa_swap4((GLuint *) dest, width);
             }
@@ -206,10 +206,10 @@ get_tex_stencil(struct gl_context *ctx, GLuint dimensions,
             void *dest = _mesa_image_address(dimensions, &ctx->Pack, pixels,
                                              width, height, format, type,
                                              img, row, 0);
-            _mesa_unpack_ubyte_stencil_row(texImage->TexFormat,
-                                           width,
-                                           (const GLuint *) src,
-                                           dest);
+//            _mesa_unpack_ubyte_stencil_row(texImage->TexFormat,
+//                                           width,
+//                                           (const GLuint *) src,
+//                                           dest);
          }
 
          ctx->Driver.UnmapTextureImage(ctx, texImage, img);
@@ -359,10 +359,10 @@ get_tex_rgba_compressed(struct gl_context *ctx, GLuint dimensions,
       void *dest = _mesa_image_address(dimensions, &ctx->Pack, pixels,
                                        width, height, format, type,
                                        slice, 0, 0);
-      _mesa_format_convert(dest, dstFormat, dstStride,
-                           tempSlice, RGBA32_FLOAT, srcStride,
-                           width, height,
-                           needsRebase ? rebaseSwizzle : NULL);
+//      _mesa_format_convert(dest, dstFormat, dstStride,
+//                           tempSlice, RGBA32_FLOAT, srcStride,
+//                           width, height,
+//                           needsRebase ? rebaseSwizzle : NULL);
       tempSlice += 4 * width * height;
    }
 
@@ -450,10 +450,10 @@ get_tex_rgba_uncompressed(struct gl_context *ctx, GLuint dimensions,
       rebaseSwizzle[1] = MESA_FORMAT_SWIZZLE_ZERO;
       rebaseSwizzle[2] = MESA_FORMAT_SWIZZLE_ZERO;
       rebaseSwizzle[3] = MESA_FORMAT_SWIZZLE_W;
-    } else if (texImage->_BaseFormat != _mesa_get_format_base_format(texFormat)) {
-      needsRebase =
-         _mesa_compute_rgba2base2rgba_component_mapping(texImage->_BaseFormat,
-                                                        rebaseSwizzle);
+//    } else if (texImage->_BaseFormat != _mesa_get_format_base_format(texFormat)) {
+//      needsRebase =
+//         _mesa_compute_rgba2base2rgba_component_mapping(texImage->_BaseFormat,
+//                                                        rebaseSwizzle);
     } else {
       needsRebase = false;
     }
@@ -500,7 +500,7 @@ get_tex_rgba_uncompressed(struct gl_context *ctx, GLuint dimensions,
          bool need_convert = false;
 
          /* We will convert to RGBA float */
-         rgba_format = RGBA32_FLOAT;
+//         rgba_format = RGBA32_FLOAT;
          rgba_stride = width * 4 * sizeof(GLfloat);
 
          /* If we are lucky and the dst format matches the RGBA format we need
@@ -520,10 +520,10 @@ get_tex_rgba_uncompressed(struct gl_context *ctx, GLuint dimensions,
             }
          }
 
-         _mesa_format_convert(rgba, rgba_format, rgba_stride,
-                              img_src, texFormat, rowstride,
-                              width, height,
-                              needsRebase ? rebaseSwizzle : NULL);
+//         _mesa_format_convert(rgba, rgba_format, rgba_stride,
+//                              img_src, texFormat, rowstride,
+//                              width, height,
+//                              needsRebase ? rebaseSwizzle : NULL);
 
          /* Handle transfer ops now */
          _mesa_apply_rgba_transfer_ops(ctx, transferOps, width * height, rgba);
@@ -549,10 +549,10 @@ get_tex_rgba_uncompressed(struct gl_context *ctx, GLuint dimensions,
       }
 
       /* Do the conversion to destination format */
-      _mesa_format_convert(dest, dst_format, dst_stride,
-                           src, src_format, src_stride,
-                           width, height,
-                           needsRebase ? rebaseSwizzle : NULL);
+//      _mesa_format_convert(dest, dst_format, dst_stride,
+//                           src, src_format, src_stride,
+//                           width, height,
+//                           needsRebase ? rebaseSwizzle : NULL);
 
    do_swap:
       /* Handle byte swapping if required */

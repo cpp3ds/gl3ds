@@ -124,6 +124,9 @@ do {                       \
 /* Used to optionally mark structures with misaligned elements or size as
  * packed, to trade off performance for space.
  */
+#ifdef PACKED
+#undef PACKED
+#endif
 #ifdef HAVE_FUNC_ATTRIBUTE_PACKED
 #define PACKED __attribute__((__packed__))
 #else

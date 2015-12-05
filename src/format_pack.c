@@ -39,7 +39,7 @@
 #include <stdint.h>
 
 #include "format_pack.h"
-#include "format_utils.h"
+//#include "format_utils.h"
 #include "macros.h"
 //#include "../../gallium/auxiliary/util/u_format_rgb9e5.h"
 //#include "../../gallium/auxiliary/util/u_format_r11g11b10f.h"

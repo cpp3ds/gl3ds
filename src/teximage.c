@@ -4031,10 +4031,10 @@ _mesa_copy_texture_sub_image(struct gl_context *ctx, GLuint dims,
 
    FLUSH_VERTICES(ctx, 0);
 
-//   if (MESA_VERBOSE & (VERBOSE_API|VERBOSE_TEXTURE))
-//      _mesa_debug(ctx, "%s %s %d %d %d %d %d %d %d %d\n", caller,
-//                  _mesa_lookup_enum_by_nr(target),
-//                  level, xoffset, yoffset, zoffset, x, y, width, height);
+   if (MESA_VERBOSE & (VERBOSE_API|VERBOSE_TEXTURE))
+      _mesa_debug(ctx, "%s %s %d %d %d %d %d %d %d %d\n", caller,
+                  _mesa_lookup_enum_by_nr(target),
+                  level, xoffset, yoffset, zoffset, x, y, width, height);
 
    if (ctx->NewState & NEW_COPY_TEX_STATE)
       _mesa_update_state(ctx);

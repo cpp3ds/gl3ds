@@ -458,17 +458,6 @@ _mesa_get_viewport_xform(struct gl_context *ctx, unsigned i,
 //	}
 }
 
-static u32 f32tof24(float f)
-{
-	if(!f)return 0;
-	u32 v=*((u32*)&f);
-	u8 s=v>>31;
-	u32 exp=((v>>23)&0xFF)-0x40;
-	u32 man=(v>>7)&0xFFFF;
-
-	if(exp>=0)return man|(exp<<16)|(s<<23);
-	else return s<<23;
-}
 
 static void gpuDepthRange(float nearVal, float farVal)
 {
@@ -488,9 +477,4 @@ void _gl3ds_update_viewport(struct gl_context *ctx)
 			ctx->Screen == GFX_TOP ? (u32)ctx->ViewportArray[0].Height : (u32)ctx->ViewportArray[0].Height,
 			(u32)ctx->ViewportArray[0].Width);
 	GPU_DepthMap(-1.0f, 0.0f); // calculate the depth value from the Z coordinate in the following way: -1.0*z + 0.0
-//	gpuDepthRange(ctx->ViewportArray[0].Near, ctx->ViewportArray[0].Far);
-//	GPUCMD_AddSingleParam(0x000F006D, 0x00000001); //?
-//	GPUCMD_AddSingleParam(0x000F004D, (u32)(ctx->ViewportArray[0].Near - ctx->ViewportArray[0].Far));
-//	GPUCMD_AddSingleParam(0x000F004E, (u32)(ctx->ViewportArray[0].Near));
-
 }

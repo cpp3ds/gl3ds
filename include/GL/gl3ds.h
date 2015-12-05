@@ -1213,6 +1213,9 @@ void glGetPixelMapusv( GLenum map, GLushort *values );
 void glPixelTransferf(GLenum pname, GLfloat param);
 void glPixelTransferi( GLenum pname, GLint param );
 
+// readpix.c
+void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels );
+
 // samplerobj.c
 void glGenSamplers(GLsizei count, GLuint *samplers);
 void glCreateSamplers(GLsizei count, GLuint *samplers);

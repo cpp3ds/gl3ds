@@ -42,7 +42,7 @@
 #include "texcompress_etc.h"
 #include "texstore.h"
 #include "macros.h"
-#include "format_unpack.h"
+//#include "format_unpack.h"
 #include "util/format_srgb.h"
 
 
@@ -458,12 +458,12 @@ etc2_rgb8_parse_block(struct etc2_block *block,
       /* Use same modifier tables as for etc1 textures if opaque bit is set
        * or if non punchthrough texture format
        */
-      block->modifier_tables[0] = (block->opaque || !punchthrough_alpha) ?
-                                  etc1_modifier_tables[table1_idx] :
-                                  etc2_modifier_tables_non_opaque[table1_idx];
-      block->modifier_tables[1] = (block->opaque || !punchthrough_alpha) ?
-                                  etc1_modifier_tables[table2_idx] :
-                                  etc2_modifier_tables_non_opaque[table2_idx];
+//      block->modifier_tables[0] = (block->opaque || !punchthrough_alpha) ?
+//                                  etc1_modifier_tables[table1_idx] :
+//                                  etc2_modifier_tables_non_opaque[table1_idx];
+//      block->modifier_tables[1] = (block->opaque || !punchthrough_alpha) ?
+//                                  etc1_modifier_tables[table2_idx] :
+//                                  etc2_modifier_tables_non_opaque[table2_idx];
 
       block->flipped = (src[3] & 0x1);
    }

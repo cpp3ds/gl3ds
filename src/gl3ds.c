@@ -27,7 +27,7 @@ static aptHookCookie apt_hook_cookie;
 void gl3ds_Clear(struct gl_context *ctx, GLbitfield mask) {
 	// TODO: implement masks
 	u32 color = RGBA8((char)ctx->Color.ClearColor.i[0], (char)ctx->Color.ClearColor.i[1], (char)ctx->Color.ClearColor.i[2], (char)ctx->Color.ClearColor.i[3]);
-	GX_SetMemoryFill(NULL, ctx->FrameBuffer, color, &ctx->FrameBuffer[0x2EE00], GX_FILL_TRIGGER | GX_FILL_32BIT_DEPTH,
+	GX_MemoryFill(ctx->FrameBuffer, color, &ctx->FrameBuffer[0x2EE00], GX_FILL_TRIGGER | GX_FILL_32BIT_DEPTH,
 					 ctx->DepthBuffer, 0x00000000, &ctx->DepthBuffer[0x2EE00], GX_FILL_TRIGGER | GX_FILL_32BIT_DEPTH);
 	gspWaitForPSC0();
 }
@@ -41,7 +41,7 @@ void gl3ds_Flush(struct gl_context *ctx)
 }
 
 
-static void apt_hook_func(int hook, void* param)
+static void apt_hook_func(APT_HookType hook, void* param)
 {
 	GET_CURRENT_CONTEXT(ctx);
 	if (currentContext == ctx) {
@@ -54,7 +54,7 @@ static void apt_hook_func(int hook, void* param)
 			ctx->NewState = _NEW_PROGRAM;
 			_gl3ds_update_program(ctx);
 			GPUCMD_Finalize();
-			GPUCMD_FlushAndRun(NULL);
+			GPUCMD_FlushAndRun();
 			gspWaitForP3D();
 			GPUCMD_SetBufferOffset(0);
 //			ctx->NewState = _NEW_VIEWPORT | _NEW_PROJECTION | _NEW_MODELVIEW;
@@ -143,11 +143,6 @@ void update_context(struct gl_context *ctx)
 // This is unknown
 	GPUCMD_AddMaskedWrite(GPUREG_0062, 0x1, 0);
 	GPUCMD_AddWrite(GPUREG_0118, 0);
-
-
-//	GPU_SetAlphaBlending(GPU_BLEND_ADD, GPU_BLEND_ADD,
-//						 GPU_SRC_ALPHA, GPU_ONE_MINUS_SRC_ALPHA,
-//						 GPU_ONE, GPU_ONE_MINUS_SRC_ALPHA);
 
 #define CLAMP_FLOAT(val) ((u8)((val) * (float)((1 << 8) - 1)))
 
@@ -286,8 +281,6 @@ GLuint gl3ds_createContext(GLuint sharedContext, gfxScreen_t screen)
 	driverFunctions->Flush =       gl3ds_Flush;
 
 	if (_mesa_initialize_context(ctx, vis, shared_ctx, driverFunctions)) {
-		ctx->ReadBuffer = _mesa_create_framebuffer(vis);
-		ctx->DrawBuffer = _mesa_create_framebuffer(vis);
 		ctx->RenderMode = GL_RENDER; // From feedback.c
 		ctx->Screen = screen;
 		return (GLuint) ctx;
@@ -339,11 +332,11 @@ void gl3ds_flushContext(GLuint context)
 //	update_context(ctx);
 	GPU_FinishDrawing();
 	GPUCMD_Finalize();
-	GPUCMD_FlushAndRun(NULL);
+	GPUCMD_FlushAndRun();
 	gspWaitForP3D();
 
 	u32 dim = (ctx->Screen == GFX_TOP) ? GX_BUFFER_DIM(240, 400) : GX_BUFFER_DIM(240, 320);
-	GX_SetDisplayTransfer(NULL, ctx->FrameBuffer, dim, (u32*)gfxGetFramebuffer(ctx->Screen, GFX_LEFT, NULL, NULL), dim, DISPLAY_TRANSFER_FLAGS);
+	GX_DisplayTransfer(ctx->FrameBuffer, dim, (u32*)gfxGetFramebuffer(ctx->Screen, GFX_LEFT, NULL, NULL), dim, DISPLAY_TRANSFER_FLAGS);
 	gspWaitForPPF();
 
 //	ctx->CommandBufferOffset = 0;

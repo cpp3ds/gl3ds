@@ -55,7 +55,7 @@
 #include "glheader.h"
 #include "bufferobj.h"
 #include "format_pack.h"
-#include "format_utils.h"
+//#include "format_utils.h"
 #include "image.h"
 #include "macros.h"
 #include "mipmap.h"
@@ -803,9 +803,9 @@ texstore_rgba(TEXSTORE_PARAMS)
       src = (GLubyte *) srcAddr;
       dst = (GLubyte *) tempRGBA;
       for (img = 0; img < srcDepth; img++) {
-         _mesa_format_convert(dst, RGBA32_FLOAT, 4 * srcWidth * sizeof(float),
-                              src, srcMesaFormat, srcRowStride,
-                              srcWidth, srcHeight, NULL);
+//         _mesa_format_convert(dst, RGBA32_FLOAT, 4 * srcWidth * sizeof(float),
+//                              src, srcMesaFormat, srcRowStride,
+//                              srcWidth, srcHeight, NULL);
          src += srcHeight * srcRowStride;
          dst += srcHeight * 4 * srcWidth * sizeof(float);
       }
@@ -821,26 +821,26 @@ texstore_rgba(TEXSTORE_PARAMS)
       srcFormat = GL_RGBA;
       srcType = GL_FLOAT;
       srcRowStride = srcWidth * 4 * sizeof(float);
-      srcMesaFormat = RGBA32_FLOAT;
+//      srcMesaFormat = RGBA32_FLOAT;
    }
 
    src = (GLubyte *)
       _mesa_image_address(dims, srcPacking, srcAddr, srcWidth, srcHeight,
                           srcFormat, srcType, 0, 0, 0);
 
-   if (_mesa_get_format_base_format(dstFormat) != baseInternalFormat) {
-      needRebase =
-         _mesa_compute_rgba2base2rgba_component_mapping(baseInternalFormat,
-                                                        rebaseSwizzle);
-   } else {
+//   if (_mesa_get_format_base_format(dstFormat) != baseInternalFormat) {
+//      needRebase =
+//         _mesa_compute_rgba2base2rgba_component_mapping(baseInternalFormat,
+//                                                        rebaseSwizzle);
+//   } else {
       needRebase = false;
-   }
+//   }
 
    for (img = 0; img < srcDepth; img++) {
-      _mesa_format_convert(dstSlices[img], dstFormat, dstRowStride,
-                           src, srcMesaFormat, srcRowStride,
-                           srcWidth, srcHeight,
-                           needRebase ? rebaseSwizzle : NULL);
+//      _mesa_format_convert(dstSlices[img], dstFormat, dstRowStride,
+//                           src, srcMesaFormat, srcRowStride,
+//                           srcWidth, srcHeight,
+//                           needRebase ? rebaseSwizzle : NULL);
       src += srcHeight * srcRowStride;
    }
 

@@ -85,7 +85,7 @@ _mesa_init_driver_functions(struct dd_function_table *driver)
 //   driver->Accum = _mesa_accum;
 //   driver->RasterPos = _tnl_RasterPos;
 //   driver->DrawPixels = _swrast_DrawPixels;
-//   driver->ReadPixels = _mesa_readpixels;
+   driver->ReadPixels = _mesa_readpixels;
 //   driver->CopyPixels = _swrast_CopyPixels;
 //   driver->Bitmap = _swrast_Bitmap;
 
