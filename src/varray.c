@@ -2384,7 +2384,7 @@ void glDrawArrays(GLenum mode, GLint first, GLsizei count)
 	GPUCMD_AddIncrementalWrites(GPUREG_ATTRIBBUFFERS_LOC, param, 28);
 
 	GPUCMD_AddMaskedWrite(GPUREG_VSH_INPUTBUFFER_CONFIG, 0xB, 0xA0000000|(attrib_count-1));
-	GPUCMD_AddWrite(GPUREG_0242, (attrib_count-1));
+	GPUCMD_AddWrite(GPUREG_VSH_NUM_ATTR, (attrib_count-1));
 
 	GPUCMD_AddIncrementalWrites(GPUREG_VSH_ATTRIBUTES_PERMUTATION_LOW, ((u32[]){vao->AttributePermutation&0xFFFFFFFF, (vao->AttributePermutation>>32)&0xFFFF}), 2);
 

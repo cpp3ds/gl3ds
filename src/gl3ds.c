@@ -140,9 +140,6 @@ void update_context(struct gl_context *ctx)
 //	GPU_SetBlendingColor(0,0,0,0);
 	GPU_SetDepthTestAndWriteMask(false, GPU_GREATER, GPU_WRITE_ALL);
 //	GPU_SetDepthTestAndWriteMask(true, GPU_GEQUAL, GPU_WRITE_ALL);
-// This is unknown
-	GPUCMD_AddMaskedWrite(GPUREG_0062, 0x1, 0);
-	GPUCMD_AddWrite(GPUREG_0118, 0);
 
 #define CLAMP_FLOAT(val) ((u8)((val) * (float)((1 << 8) - 1)))
 
@@ -160,7 +157,7 @@ void update_context(struct gl_context *ctx)
 				CLAMP_FLOAT(ctx->Color.BlendColor[3]));
 	} else {
 		// Disable AlphaBlending
-		GPUCMD_AddWrite(GPUREG_BLEND_CONFIG, 0x01010000);
+		GPUCMD_AddWrite(GPUREG_BLEND_FUNC, 0x01010000);
 		GPUCMD_AddWrite(GPUREG_BLEND_COLOR, 0x0);
 	}
 

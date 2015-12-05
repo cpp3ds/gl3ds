@@ -161,6 +161,6 @@ void _gl3ds_update_depth(struct gl_context * ctx)
 		GPUCMD_AddSingleParam(0x000F0107, 0 | (mask << 8) | (ctx->Depth.Mask << 12));
 
 	// This is unknown
-	GPUCMD_AddMaskedWrite(GPUREG_0062, 0x1, 0);
-	GPUCMD_AddWrite(GPUREG_0118, 0);
+	GPUCMD_AddMaskedWrite(GPUREG_EARLYDEPTH_TEST1, 0x1, 0);
+	GPUCMD_AddWrite(GPUREG_EARLYDEPTH_TEST2, 0);
 }
