@@ -1,9 +1,9 @@
 language: c
 
-sudo: required
+sudo: false
 
 before_install:
-  - export DEVKITPRO=/home/travis/devkitPro
+  - export DEVKITPRO=${HOME}/devkitPro
   - export DEVKITARM=${DEVKITPRO}/devkitARM
   - export CTRULIB=${DEVKITPRO}/libctru
   - sh .travis-deps.sh

@@ -4,9 +4,8 @@ set -x
 
 # Build and install devkitARM + ctrulib
 wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitARMupdate.pl
-git clone https://github.com/smealum/ctrulib.git
-sudo perl devkitARMupdate.pl
+perl devkitARMupdate.pl
 
 # Get latest ctrulib and overwrite bundled one
-cd ctrulib/libctru && git checkout great-refactor && make -j4 && cd -
-sudo cp -rf ctrulib/libctru/ ${DEVKITPRO}
+git clone https://github.com/smealum/ctrulib.git
+cd ctrulib/libctru && git checkout great-refactor && make -j4 install && cd -
