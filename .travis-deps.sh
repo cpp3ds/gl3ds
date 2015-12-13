@@ -8,4 +8,4 @@ perl devkitARMupdate.pl
 
 # Get latest ctrulib and overwrite bundled one
 git clone https://github.com/smealum/ctrulib.git
-cd ctrulib/libctru && git checkout great-refactor && make -j4 install && cd -
+cd ctrulib/libctru && make -j4 install && cd -

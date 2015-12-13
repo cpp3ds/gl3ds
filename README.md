@@ -23,9 +23,7 @@ List not yet compiled.
 
 Credit and Thanks
 -----------------
-- [StapleButter](https://github.com/StapleButter)
-- [Steveice10](https://github.com/Steveice10)
-- [minexew](https://github.com/minexew) - ctrgl
+- [fincs](https://github.com/fincs) - GPU help
 - [smealum](https://github.com/smealum) - ctrulib
 
 Donate BTC: 12XCVwHSX38dvUSWhbUFPJWKWTjHDRG96k
